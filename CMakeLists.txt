@@ -37,6 +37,15 @@ if(NOT glm_FOUND)
     FetchContent_MakeAvailable(glm)
 endif()
 
+# Download and build Raylib
+FetchContent_Declare(
+    raylib
+    GIT_REPOSITORY https://github.com/raysan5/raylib.git
+    GIT_TAG 5.0
+)
+set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # don't build the supplied examples
+FetchContent_MakeAvailable(raylib)
+
 # Compiler-specific options
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Wall -Wextra")
@@ -63,12 +72,18 @@ set(MATH_SOURCES
     appsrc/src/Math/camera.cpp
 )
 
+set(INTERACTIVE_SOURCES
+    ${MATH_SOURCES}
+    appsrc/src/Math/display.cpp
+)
+
 set(MATH_HEADERS
     appsrc/include/Math/vec3.h
     appsrc/include/Math/modern_vec3.h
     appsrc/include/Math/modern_sphere.h
     appsrc/include/Math/simd_batch.h
     appsrc/include/Math/performance.h
+    appsrc/include/Math/display.h
     appsrc/include/Math/ray.h
     appsrc/include/Math/hittable.h
     appsrc/include/Math/sphere.h
@@ -96,18 +111,56 @@ add_executable(raytracing_simd
     ${MATH_HEADERS}
 )
 
+add_executable(raytracing_simple_perf
+    main_simple_perf.cpp
+    ${MATH_SOURCES}
+    ${MATH_HEADERS}
+)
+
+add_executable(raytracing_optimized
+    main_optimized.cpp
+    ${MATH_SOURCES}
+    ${MATH_HEADERS}
+)
+
+add_executable(raytracing_interactive_simple
+    main_interactive_simple.cpp
+    ${MATH_SOURCES}
+    ${MATH_HEADERS}
+)
+
+add_executable(raytracing_interactive
+    main_interactive.cpp
+    ${INTERACTIVE_SOURCES}
+    ${MATH_HEADERS}
+)
+
 # Link libraries
 target_link_libraries(raytracing PRIVATE glm::glm)
 target_link_libraries(raytracing_modern PRIVATE glm::glm)
 target_link_libraries(raytracing_simd PRIVATE glm::glm)
+target_link_libraries(raytracing_simple_perf PRIVATE glm::glm)
+target_link_libraries(raytracing_optimized PRIVATE glm::glm)
+target_link_libraries(raytracing_interactive_simple PRIVATE glm::glm raylib)
+target_link_libraries(raytracing_interactive PRIVATE glm::glm raylib)
+
+# Add Raylib include path for interactive targets
+target_include_directories(raytracing_interactive_simple PRIVATE ${raylib_SOURCE_DIR}/src)
+target_include_directories(raytracing_interactive PRIVATE ${raylib_SOURCE_DIR}/src)
 
 if(OpenMP_CXX_FOUND)
     target_link_libraries(raytracing PRIVATE OpenMP::OpenMP_CXX)
     target_link_libraries(raytracing_modern PRIVATE OpenMP::OpenMP_CXX)
     target_link_libraries(raytracing_simd PRIVATE OpenMP::OpenMP_CXX)
+    target_link_libraries(raytracing_optimized PRIVATE OpenMP::OpenMP_CXX)
+    target_link_libraries(raytracing_interactive_simple PRIVATE OpenMP::OpenMP_CXX)
+    target_link_libraries(raytracing_interactive PRIVATE OpenMP::OpenMP_CXX)
     target_compile_definitions(raytracing PRIVATE USE_OPENMP)
     target_compile_definitions(raytracing_modern PRIVATE USE_OPENMP)
     target_compile_definitions(raytracing_simd PRIVATE USE_OPENMP)
+    target_compile_definitions(raytracing_optimized PRIVATE USE_OPENMP)
+    target_compile_definitions(raytracing_interactive_simple PRIVATE USE_OPENMP)
+    target_compile_definitions(raytracing_interactive PRIVATE USE_OPENMP)
 endif()
 
 # Platform-specific settings
