@@ -8,7 +8,7 @@ class Camera
 public:
     Camera(Vec3 a_oLookFrom, Vec3 a_oLookAt, Vec3 a_oUp, float a_fFov, float a_fAspect, float a_fAperture, float a_fFocusDist);
 
-    Ray GetRay(float a_fU, float a_fV);
+    Ray GetRay(float a_fU, float a_fV) const;
 
     Vec3 m_oOrigin;
     Vec3 m_oLowerLeftCorner;
@@ -16,7 +16,7 @@ public:
     Vec3 m_oVertical;
     Vec3 m_oU, m_oV, m_oW;
 
-    Vec3 RandomUnitInDisk();
+    Vec3 RandomUnitInDisk() const;
 
     float m_fLensRadius;
 };

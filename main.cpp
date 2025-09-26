@@ -82,9 +82,9 @@ Hittable* RandomScene()
 
 int main(int argc, char const *argv[])
 {
-    int nx = 1200;
-    int ny = 800;
-    int ns = 10;
+    int nx = 400;
+    int ny = 300;
+    int ns = 5;
 
     std::fstream _outputFile;
 
