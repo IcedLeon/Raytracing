@@ -1,5 +1,14 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.11)
 project(Raytracing VERSION 1.0.0 LANGUAGES CXX)
+
+# Handle CMake policy compatibility for dependencies
+if(POLICY CMP0077)
+    cmake_policy(SET CMP0077 NEW)
+endif()
+
+# Set minimum policy version to handle GLM compatibility
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 20)
@@ -21,9 +30,10 @@ if(NOT glm_FOUND)
     include(FetchContent)
     FetchContent_Declare(
         glm
-        GIT_REPOSITORY https://github.com/g-truc/glm.git
-        GIT_TAG 0.9.9.8
+        GIT_REPOSITORY	https://github.com/g-truc/glm.git
+        GIT_TAG 	bf71a834948186f4097caa076cd2663c69a10e1e #refs/tags/1.0.1
     )
+        
     FetchContent_MakeAvailable(glm)
 endif()
 

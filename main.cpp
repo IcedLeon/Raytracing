@@ -1,14 +1,16 @@
 #include <iostream>
 #include <fstream>
 #include <float.h>
+#include <string>
 #include <stdlib.h>
 #include "appsrc/include/Math/sphere.h"
 #include "appsrc/include/Math/hittablelist.h"
 #include "appsrc/include/Math/camera.h"
 #include "appsrc/include/Math/material.h"
 
+#define M_PI 3.14159265358979323846
 
-Vec3 Color(const Ray& a_oRay, Hittable* a_oWorld, int a_iDepth)
+Vec3 Color(const Ray &a_oRay, Hittable *a_oWorld, int a_iDepth)
 {
     HitRecord _record;
 
@@ -36,11 +38,11 @@ Vec3 Color(const Ray& a_oRay, Hittable* a_oWorld, int a_iDepth)
     }
 }
 
-Hittable* RandomScene()
+Hittable *RandomScene()
 {
     int n = 500;
 
-    Hittable** _list = new Hittable*[n + 1];
+    Hittable **_list = new Hittable *[n + 1];
 
     _list[0] = new Sphere(Vec3(0.0f, -1000.0f, 0.0f), 1000.0f, new Lambertian(Vec3(0.5f, 0.5f, 0.5f)));
 
@@ -73,7 +75,7 @@ Hittable* RandomScene()
         }
     }
 
-    _list[i++] = new Sphere(Vec3(0.0f, 1.0f, 0.0f), 1.0f , new Dielectric(1.5f));
+    _list[i++] = new Sphere(Vec3(0.0f, 1.0f, 0.0f), 1.0f, new Dielectric(1.5f));
     _list[i++] = new Sphere(Vec3(-4.0f, 1.0f, 0.0f), 1.0f, new Lambertian(Vec3(0.4f, 0.2f, 0.1f)));
     _list[i++] = new Sphere(Vec3(4.0f, 1.0f, 0.0f), 1.0f, new Metal(Vec3(0.7f, 0.6f, 0.5f), 0.0f));
 
@@ -94,9 +96,9 @@ int main(int argc, char const *argv[])
 
     _outputFile << _head;
 
-    Hittable* _list[5];
+    Hittable *_list[5];
 
-    float _r = cos(M_PI / 4);
+    float _r = static_cast<float>(cos(M_PI / 4));
 
     _list[0] = new Sphere(Vec3(0.0f, 0.0f, -1.0f), 0.5f, new Lambertian(Vec3(0.1f, 0.2f, 0.5f)));
     _list[1] = new Sphere(Vec3(0.0f, -100.5f, -1.0f), 100, new Lambertian(Vec3(0.8f, 0.8f, 0.0f)));
@@ -104,7 +106,7 @@ int main(int argc, char const *argv[])
     _list[3] = new Sphere(Vec3(-1.0f, 0.0f, -1.0f), 0.5f, new Dielectric(1.5f));
     _list[3] = new Sphere(Vec3(-1.0f, 0.0f, -1.0f), -0.45f, new Dielectric(1.5f));
 
-    Hittable* _world = RandomScene();
+    Hittable *_world = RandomScene();
 
     Vec3 _lookFrom(13.0f, 2.0f, 3.0f);
     Vec3 _lookAt(0.0f, 0.0f, 0.0f);
@@ -137,7 +139,7 @@ int main(int argc, char const *argv[])
             int ig = int(255.99 * _col[1]);
             int ib = int(255.99 * _col[2]);
 
-            //std::cout << ir << " " << ig << " " << ib << "\n";
+            // std::cout << ir << " " << ig << " " << ib << "\n";
             std::string _row = std::to_string(ir) + " " + std::to_string(ig) + " " + std::to_string(ib) + "\n";
             _outputFile << _row;
         }

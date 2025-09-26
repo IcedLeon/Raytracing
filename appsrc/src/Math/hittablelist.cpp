@@ -16,7 +16,7 @@ bool HittableList::Hit(const Ray &a_oRay, float a_fTMin, float a_fTMax, HitRecor
 
     bool _hittedAnything = false;
 
-    double _closestSoFar = a_fTMax;
+    float _closestSoFar = a_fTMax;
 
     for (int i = 0; i < m_iListSize; ++i)
     {

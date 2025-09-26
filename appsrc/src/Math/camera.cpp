@@ -1,3 +1,5 @@
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include "appsrc/include/Math/camera.h"
 #include <random>
 
@@ -5,7 +7,7 @@ Camera::Camera(Vec3 a_oLookFrom, Vec3 a_oLookAt, Vec3 a_oUp, float a_fFov, float
 {
     m_fLensRadius = a_fAperture / 2;
 
-    float _theta = a_fFov * M_PI / 180;
+    float _theta = a_fFov * static_cast<float>(M_PI) / 180;
 
     float _halfHeight = tan(_theta / 2);
 
@@ -31,7 +33,7 @@ Vec3 Camera::RandomUnitInDisk() const
     thread_local std::random_device rd;
     thread_local std::mt19937 gen(rd());
     thread_local std::uniform_real_distribution<float> dis(0.0f, 1.0f);
-    
+
     Vec3 _p;
     do
     {

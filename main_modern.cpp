@@ -20,26 +20,29 @@
 // Thread-local statistics
 thread_local RenderStats thread_stats;
 
-Vec3 Color(const Ray& a_oRay, Hittable* a_oWorld, int a_iDepth, RenderStats* stats = nullptr)
+Vec3 Color(const Ray &a_oRay, Hittable *a_oWorld, int a_iDepth, RenderStats *stats = nullptr)
 {
-    if (stats) {
+    if (stats)
+    {
         stats->rays_traced++;
     }
-    
+
     HitRecord _record;
 
     if (a_oWorld->Hit(a_oRay, 0.001f, FLT_MAX, _record))
     {
-        if (stats) {
+        if (stats)
+        {
             stats->intersection_tests++;
         }
-        
+
         Ray _scatter;
         Vec3 _attenuation;
 
         if (a_iDepth < 50 && _record.m_oMaterial->Scatter(a_oRay, _record, _attenuation, _scatter))
         {
-            if (stats) {
+            if (stats)
+            {
                 stats->material_evaluations++;
             }
             return _attenuation * Color(_scatter, a_oWorld, a_iDepth + 1, stats);
@@ -57,10 +60,10 @@ Vec3 Color(const Ray& a_oRay, Hittable* a_oWorld, int a_iDepth, RenderStats* sta
     }
 }
 
-Hittable* RandomScene()
+Hittable *RandomScene()
 {
     int n = 500;
-    Hittable** _list = new Hittable*[n + 1];
+    Hittable **_list = new Hittable *[n + 1];
 
     _list[0] = new Sphere(Vec3(0.0f, -1000.0f, 0.0f), 1000.0f, new Lambertian(Vec3(0.5f, 0.5f, 0.5f)));
 
@@ -92,7 +95,7 @@ Hittable* RandomScene()
         }
     }
 
-    _list[i++] = new Sphere(Vec3(0.0f, 1.0f, 0.0f), 1.0f , new Dielectric(1.5f));
+    _list[i++] = new Sphere(Vec3(0.0f, 1.0f, 0.0f), 1.0f, new Dielectric(1.5f));
     _list[i++] = new Sphere(Vec3(-4.0f, 1.0f, 0.0f), 1.0f, new Lambertian(Vec3(0.4f, 0.2f, 0.1f)));
     _list[i++] = new Sphere(Vec3(4.0f, 1.0f, 0.0f), 1.0f, new Metal(Vec3(0.7f, 0.6f, 0.5f), 0.0f));
 
@@ -100,21 +103,25 @@ Hittable* RandomScene()
 }
 
 // Multi-threaded tile renderer
-void render_tile(const RenderTile& tile, std::vector<Vec3>& pixels, int nx, int ny, 
-                 const Camera& camera, Hittable* world, RenderStats& tile_stats) {
-    
-    for (int j = tile.y_start; j < tile.y_start + tile.height; ++j) {
-        for (int i = tile.x_start; i < tile.x_start + tile.width; ++i) {
+void render_tile(const RenderTile &tile, std::vector<Vec3> &pixels, int nx, int ny,
+                 const Camera &camera, Hittable *world, RenderStats &tile_stats)
+{
+
+    for (int j = tile.y_start; j < tile.y_start + tile.height; ++j)
+    {
+        for (int i = tile.x_start; i < tile.x_start + tile.width; ++i)
+        {
             Vec3 col(0.0f, 0.0f, 0.0f);
 
-            for (int s = 0; s < tile.samples_per_pixel; ++s) {
+            for (int s = 0; s < tile.samples_per_pixel; ++s)
+            {
                 float u = float(i + (std::rand() / (RAND_MAX + 1.0))) / float(nx);
                 float v = float(j + (std::rand() / (RAND_MAX + 1.0))) / float(ny);
 
                 Ray ray = camera.GetRay(u, v);
                 col += Color(ray, world, 0, &tile_stats);
             }
-            
+
             col /= float(tile.samples_per_pixel);
             col = Vec3(sqrtf(col[0]), sqrtf(col[1]), sqrtf(col[2])); // Gamma correction
 
@@ -125,15 +132,15 @@ void render_tile(const RenderTile& tile, std::vector<Vec3>& pixels, int nx, int 
 
 int main(int argc, char const *argv[])
 {
-    // Render parameters - smaller for testing
-    int nx = 400;
-    int ny = 300;
-    int ns = 5;
-    
+    // Render parameters 2k
+    int nx = 2560;
+    int ny = 1440;
+    int ns = 10;
+
     std::cout << "=== Modern Raytracer ===" << std::endl;
     std::cout << "Resolution: " << nx << "x" << ny << std::endl;
     std::cout << "Samples per pixel: " << ns << std::endl;
-    
+
 #ifdef USE_OPENMP
     int num_threads = omp_get_max_threads();
     std::cout << "OpenMP threads: " << num_threads << std::endl;
@@ -163,13 +170,16 @@ int main(int argc, char const *argv[])
     std::cout << "Rendering..." << std::endl;
 
 #ifdef USE_OPENMP
-    // OpenMP parallel rendering
-    #pragma omp parallel for schedule(dynamic, 1) collapse(2)
-    for (int j = 0; j < ny; ++j) {
-        for (int i = 0; i < nx; ++i) {
+// OpenMP parallel rendering
+#pragma omp parallel for schedule(dynamic, 1) collapse(2)
+    for (int j = 0; j < ny; ++j)
+    {
+        for (int i = 0; i < nx; ++i)
+        {
             Vec3 col(0.0f, 0.0f, 0.0f);
 
-            for (int s = 0; s < ns; ++s) {
+            for (int s = 0; s < ns; ++s)
+            {
                 float u = float(i + (std::rand() / (RAND_MAX + 1.0))) / float(nx);
                 float v = float(j + (std::rand() / (RAND_MAX + 1.0))) / float(ny);
 
@@ -188,19 +198,20 @@ int main(int argc, char const *argv[])
     auto tiles = create_tiles(nx, ny, ns, 64);
     ThreadPool pool(num_threads);
     std::vector<RenderStats> tile_stats(tiles.size());
-    
+
     std::vector<std::function<void()>> tasks;
-    for (size_t t = 0; t < tiles.size(); ++t) {
-        tasks.emplace_back([&, t]() {
-            render_tile(tiles[t], pixels, nx, ny, camera, world.get(), tile_stats[t]);
-        });
+    for (size_t t = 0; t < tiles.size(); ++t)
+    {
+        tasks.emplace_back([&, t]()
+                           { render_tile(tiles[t], pixels, nx, ny, camera, world.get(), tile_stats[t]); });
     }
-    
+
     pool.enqueue_tasks(tasks);
     pool.wait_all();
-    
+
     // Combine statistics
-    for (const auto& stats : tile_stats) {
+    for (const auto &stats : tile_stats)
+    {
         final_stats.rays_traced += stats.rays_traced.load();
         final_stats.intersection_tests += stats.intersection_tests.load();
         final_stats.material_evaluations += stats.material_evaluations.load();
@@ -215,21 +226,24 @@ int main(int argc, char const *argv[])
     // Write output
     std::cout << "Writing output file..." << std::endl;
     std::ofstream output_file("output.ppm");
-    output_file << "P3\n" << nx << " " << ny << "\n255\n";
+    output_file << "P3\n"
+                << nx << " " << ny << "\n255\n";
 
-    for (int j = ny - 1; j >= 0; --j) {
-        for (int i = 0; i < nx; ++i) {
-            const Vec3& col = pixels[j * nx + i];
+    for (int j = ny - 1; j >= 0; --j)
+    {
+        for (int i = 0; i < nx; ++i)
+        {
+            const Vec3 &col = pixels[j * nx + i];
             int ir = int(255.99 * col[0]);
             int ig = int(255.99 * col[1]);
             int ib = int(255.99 * col[2]);
-            
+
             output_file << ir << " " << ig << " " << ib << "\n";
         }
     }
-    
+
     output_file.close();
     std::cout << "Output written to output.ppm" << std::endl;
-    
+
     return 0;
 }

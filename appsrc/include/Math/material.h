@@ -4,7 +4,6 @@
 #include "appsrc/include/Math/ray.h"
 #include "appsrc/include/Math/hittable.h"
 
-
 float Schlick(float a_dCosine, float a_dRefIdx)
 {
     float _r0 = (1.0f - a_dRefIdx) / (1.0f + a_dRefIdx);
@@ -14,7 +13,7 @@ float Schlick(float a_dCosine, float a_dRefIdx)
     return _r0 + (1.0f - _r0) * pow((1.0f - a_dCosine), 5);
 }
 
-bool Refract(const Vec3& a_oVecIn, const Vec3& a_oNormal, float a_fNiOverNt, Vec3& a_oRefracted)
+bool Refract(const Vec3 &a_oVecIn, const Vec3 &a_oNormal, float a_fNiOverNt, Vec3 &a_oRefracted)
 {
     Vec3 _uv = Unit_Vector(a_oVecIn);
 
@@ -33,7 +32,7 @@ bool Refract(const Vec3& a_oVecIn, const Vec3& a_oNormal, float a_fNiOverNt, Vec
     }
 }
 
-Vec3 Reflect(const Vec3& a_oVecIn, const Vec3& a_oNormal)
+Vec3 Reflect(const Vec3 &a_oVecIn, const Vec3 &a_oNormal)
 {
     return a_oVecIn - 2 * Dot(a_oVecIn, a_oNormal) * a_oNormal;
 }
@@ -44,9 +43,10 @@ Vec3 RandomInUnitSphere()
 
     do
     {
-        _p = 2.0f * Vec3((std::rand() / (RAND_MAX + 1.0)),
-                         (std::rand() / (RAND_MAX + 1.0)),
-                         (std::rand() / (RAND_MAX + 1.0))) - Vec3(1.0f, 1.0f, 1.0f);
+        _p = 2.0f * Vec3(static_cast<float>(std::rand() / (RAND_MAX + 1.0)),
+                         static_cast<float>(std::rand() / (RAND_MAX + 1.0)),
+                         static_cast<float>(std::rand() / (RAND_MAX + 1.0))) -
+             Vec3(1.0f, 1.0f, 1.0f);
     } while (_p.SquaredLength() >= 1.0f);
 
     return _p;
@@ -55,15 +55,13 @@ Vec3 RandomInUnitSphere()
 class Material
 {
 public:
-    virtual bool Scatter(const Ray& a_oRayIn, const HitRecord& a_oRecord, Vec3& a_oAttenuation, Ray& a_oScatterRay) const = 0;
-
+    virtual bool Scatter(const Ray &a_oRayIn, const HitRecord &a_oRecord, Vec3 &a_oAttenuation, Ray &a_oScatterRay) const = 0;
 };
-
 
 class Metal : public Material
 {
 public:
-    Metal(const Vec3& a_oVecIn, float a_fFuzz);
+    Metal(const Vec3 &a_oVecIn, float a_fFuzz);
 
     virtual bool Scatter(const Ray &a_oRayIn, const HitRecord &a_oRecord, Vec3 &a_oAttenuation, Ray &a_oScatterRay) const;
 
@@ -95,14 +93,14 @@ bool Metal::Scatter(const Ray &a_oRayIn, const HitRecord &a_oRecord, Vec3 &a_oAt
 class Lambertian : public Material
 {
 public:
-    Lambertian(const Vec3& a_oVecIn);
+    Lambertian(const Vec3 &a_oVecIn);
 
     virtual bool Scatter(const Ray &a_oRayIn, const HitRecord &a_oRecord, Vec3 &a_oAttenuation, Ray &a_oScatterRay) const;
 
     Vec3 m_oAlbedo;
 };
 
-Lambertian::Lambertian(const Vec3& a_oVecIn) : m_oAlbedo(a_oVecIn)
+Lambertian::Lambertian(const Vec3 &a_oVecIn) : m_oAlbedo(a_oVecIn)
 {
 }
 
