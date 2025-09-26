@@ -111,6 +111,18 @@ add_executable(raytracing_simd
     ${MATH_HEADERS}
 )
 
+add_executable(performance_comparison
+    performance_comparison.cpp
+    ${MATH_SOURCES}
+    ${MATH_HEADERS}
+)
+
+add_executable(raytracing_modern_optimized
+    main_modern_optimized.cpp
+    ${MATH_SOURCES}
+    ${MATH_HEADERS}
+)
+
 add_executable(raylib_display
     raylib_display.cpp
 )
@@ -143,6 +155,8 @@ add_executable(raytracing_interactive
 target_link_libraries(raytracing PRIVATE glm::glm)
 target_link_libraries(raytracing_modern PRIVATE glm::glm)
 target_link_libraries(raytracing_simd PRIVATE glm::glm)
+target_link_libraries(performance_comparison PRIVATE glm::glm)
+target_link_libraries(raytracing_modern_optimized PRIVATE glm::glm)
 target_link_libraries(raylib_display PRIVATE raylib)
 target_link_libraries(raytracing_simple_perf PRIVATE glm::glm)
 target_link_libraries(raytracing_optimized PRIVATE glm::glm)
@@ -158,12 +172,14 @@ if(OpenMP_CXX_FOUND)
     target_link_libraries(raytracing PRIVATE OpenMP::OpenMP_CXX)
     target_link_libraries(raytracing_modern PRIVATE OpenMP::OpenMP_CXX)
     target_link_libraries(raytracing_simd PRIVATE OpenMP::OpenMP_CXX)
+    target_link_libraries(raytracing_modern_optimized PRIVATE OpenMP::OpenMP_CXX)
     target_link_libraries(raytracing_optimized PRIVATE OpenMP::OpenMP_CXX)
     target_link_libraries(raytracing_interactive_simple PRIVATE OpenMP::OpenMP_CXX)
     target_link_libraries(raytracing_interactive PRIVATE OpenMP::OpenMP_CXX)
     target_compile_definitions(raytracing PRIVATE USE_OPENMP)
     target_compile_definitions(raytracing_modern PRIVATE USE_OPENMP)
     target_compile_definitions(raytracing_simd PRIVATE USE_OPENMP)
+    target_compile_definitions(raytracing_modern_optimized PRIVATE USE_OPENMP)
     target_compile_definitions(raytracing_optimized PRIVATE USE_OPENMP)
     target_compile_definitions(raytracing_interactive_simple PRIVATE USE_OPENMP)
     target_compile_definitions(raytracing_interactive PRIVATE USE_OPENMP)
