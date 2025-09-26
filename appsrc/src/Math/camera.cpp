@@ -1,4 +1,5 @@
 #include "appsrc/include/Math/camera.h"
+#include <random>
 
 Camera::Camera(Vec3 a_oLookFrom, Vec3 a_oLookAt, Vec3 a_oUp, float a_fFov, float a_fAspect, float a_fAperture, float a_fFocusDist)
 {
@@ -25,19 +26,22 @@ Camera::Camera(Vec3 a_oLookFrom, Vec3 a_oLookAt, Vec3 a_oUp, float a_fFov, float
     m_oVertical = 2 * _halfHeight * a_fFocusDist * m_oV;
 }
 
-Vec3 Camera::RandomUnitInDisk()
+Vec3 Camera::RandomUnitInDisk() const
 {
+    thread_local std::random_device rd;
+    thread_local std::mt19937 gen(rd());
+    thread_local std::uniform_real_distribution<float> dis(0.0f, 1.0f);
+    
     Vec3 _p;
-
     do
     {
-        _p = 2.0f * Vec3((std::rand() / (RAND_MAX + 1.0)), (std::rand() / (RAND_MAX + 1.0)), 0.0f) - Vec3(1.0f, 1.0f, 0.0f);
+        _p = 2.0f * Vec3(dis(gen), dis(gen), 0.0f) - Vec3(1.0f, 1.0f, 0.0f);
     } while (Dot(_p, _p) >= 1.0f);
 
     return _p;
 }
 
-Ray Camera::GetRay(float a_fU, float a_fV)
+Ray Camera::GetRay(float a_fU, float a_fV) const
 {
     Vec3 _rd = m_fLensRadius * RandomUnitInDisk();
 
