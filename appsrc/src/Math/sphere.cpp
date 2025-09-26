@@ -1,7 +1,7 @@
 #include "appsrc/include/Math/sphere.h"
 
 Sphere::Sphere() : m_oCenter(Vec3()),
-                   m_fRadius(NULL)
+                   m_fRadius(0.0f)
 {
 }
 
