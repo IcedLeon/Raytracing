@@ -56,6 +56,8 @@ set(MATH_SOURCES
 set(MATH_HEADERS
     appsrc/include/Math/vec3.h
     appsrc/include/Math/modern_vec3.h
+    appsrc/include/Math/modern_sphere.h
+    appsrc/include/Math/simd_batch.h
     appsrc/include/Math/performance.h
     appsrc/include/Math/ray.h
     appsrc/include/Math/hittable.h
@@ -78,15 +80,24 @@ add_executable(raytracing_modern
     ${MATH_HEADERS}
 )
 
+add_executable(raytracing_simd
+    main_simd.cpp
+    ${MATH_SOURCES}
+    ${MATH_HEADERS}
+)
+
 # Link libraries
 target_link_libraries(raytracing PRIVATE glm::glm)
 target_link_libraries(raytracing_modern PRIVATE glm::glm)
+target_link_libraries(raytracing_simd PRIVATE glm::glm)
 
 if(OpenMP_CXX_FOUND)
     target_link_libraries(raytracing PRIVATE OpenMP::OpenMP_CXX)
     target_link_libraries(raytracing_modern PRIVATE OpenMP::OpenMP_CXX)
+    target_link_libraries(raytracing_simd PRIVATE OpenMP::OpenMP_CXX)
     target_compile_definitions(raytracing PRIVATE USE_OPENMP)
     target_compile_definitions(raytracing_modern PRIVATE USE_OPENMP)
+    target_compile_definitions(raytracing_simd PRIVATE USE_OPENMP)
 endif()
 
 # Platform-specific settings

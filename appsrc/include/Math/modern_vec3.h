@@ -163,7 +163,7 @@ thread_local std::mt19937 FastRandom::generator{std::random_device{}()};
 thread_local std::uniform_real_distribution<float> FastRandom::distribution{0.0f, 1.0f};
 
 // Optimized random vector generation
-inline ModernVec3 RandomInUnitSphere() {
+inline ModernVec3 RandomInUnitSphereSIMD() {
     ModernVec3 p;
     do {
         p = 2.0f * ModernVec3(FastRandom::random(), FastRandom::random(), FastRandom::random()) - ModernVec3(1.0f, 1.0f, 1.0f);
