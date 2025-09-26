@@ -1,0 +1,39 @@
+# Build artifacts
+raytracing
+*.exe
+*.o
+*.obj
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+
+# Generated output
+*.ppm
+*.bmp
+*.png
+*.jpg
+
+# CMake build directories
+build/
+Build/
+cmake-build-*/
+
+# IDE files
+*.pro.user*
+.vscode/
+.vs/
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+
+# Platform specific
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*~
+*.tmp
+*.temp

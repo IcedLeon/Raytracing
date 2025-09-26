@@ -1,7 +1,7 @@
 #include "appsrc/include/Math/hittablelist.h"
 
 HittableList::HittableList() : m_oList(nullptr),
-                               m_iListSize(NULL)
+                               m_iListSize(0)
 {
 }
 

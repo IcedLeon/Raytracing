@@ -88,7 +88,7 @@ int main(int argc, char const *argv[])
 
     std::fstream _outputFile;
 
-    _outputFile.open("C:\\Raycasting\\Ray-Casting\\raw-texture.ppm");
+    _outputFile.open("output.ppm");
 
     std::string _head = "P3\n" + std::to_string(nx) + " " + std::to_string(ny) + "\n255\n";
 
