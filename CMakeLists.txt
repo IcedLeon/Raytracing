@@ -111,6 +111,10 @@ add_executable(raytracing_simd
     ${MATH_HEADERS}
 )
 
+add_executable(raylib_display
+    raylib_display.cpp
+)
+
 add_executable(raytracing_simple_perf
     main_simple_perf.cpp
     ${MATH_SOURCES}
@@ -139,12 +143,14 @@ add_executable(raytracing_interactive
 target_link_libraries(raytracing PRIVATE glm::glm)
 target_link_libraries(raytracing_modern PRIVATE glm::glm)
 target_link_libraries(raytracing_simd PRIVATE glm::glm)
+target_link_libraries(raylib_display PRIVATE raylib)
 target_link_libraries(raytracing_simple_perf PRIVATE glm::glm)
 target_link_libraries(raytracing_optimized PRIVATE glm::glm)
 target_link_libraries(raytracing_interactive_simple PRIVATE glm::glm raylib)
 target_link_libraries(raytracing_interactive PRIVATE glm::glm raylib)
 
-# Add Raylib include path for interactive targets
+# Add Raylib include path for targets that need it
+target_include_directories(raylib_display PRIVATE ${raylib_SOURCE_DIR}/src)
 target_include_directories(raytracing_interactive_simple PRIVATE ${raylib_SOURCE_DIR}/src)
 target_include_directories(raytracing_interactive PRIVATE ${raylib_SOURCE_DIR}/src)
 
