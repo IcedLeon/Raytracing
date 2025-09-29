@@ -17,6 +17,8 @@
 #include "appsrc/include/Math/material.h"
 #include "appsrc/include/Math/performance.h"
 
+using namespace rt;
+
 // Thread-local statistics
 thread_local RenderStats thread_stats;
 

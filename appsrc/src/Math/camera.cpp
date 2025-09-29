@@ -3,6 +3,10 @@
 #include "appsrc/include/Math/camera.h"
 #include <random>
 
+using typename rt::Camera;
+using typename rt::Ray;
+using typename rt::Vec3;
+
 Camera::Camera(Vec3 a_oLookFrom, Vec3 a_oLookAt, Vec3 a_oUp, float a_fFov, float a_fAspect, float a_fAperture, float a_fFocusDist)
 {
     m_fLensRadius = a_fAperture / 2;

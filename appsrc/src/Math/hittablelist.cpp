@@ -1,5 +1,7 @@
 #include "appsrc/include/Math/hittablelist.h"
 
+using namespace rt;
+
 HittableList::HittableList() : m_oList(nullptr),
                                m_iListSize(0)
 {

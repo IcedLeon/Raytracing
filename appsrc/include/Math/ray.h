@@ -3,21 +3,26 @@
 
 #include "appsrc/include/Math/vec3.h"
 
-class Ray
+namespace rt
 {
-public:
-    Ray();
-    Ray(const Vec3& a_oPointA, const Vec3& a_oPointB);
 
-    Vec3 Origin() const;
+    class Ray
+    {
+    public:
+        Ray();
+        Ray(const Vec3 &a_oPointA, const Vec3 &a_oPointB);
 
-    Vec3 Direction() const;
+        Vec3 Origin() const;
 
-    Vec3 PointAtParamenter(float a_fT) const;
+        Vec3 Direction() const;
 
-    Vec3 m_oOrigin;
+        Vec3 PointAtParamenter(float a_fT) const;
 
-    Vec3 m_oDirection;
-};
+        Vec3 m_oOrigin;
+
+        Vec3 m_oDirection;
+    };
+
+} // namespace rt
 
 #endif // RAY_H

@@ -9,6 +9,11 @@ endif()
 # Set minimum policy version to handle GLM compatibility
 set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 
+# Set MSVC runtime library to MultiThreadedDLL (dynamic) for all targets
+# This ensures compatibility with Raylib which expects dynamic CRT
+if(MSVC)
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
+endif()
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 20)
@@ -38,13 +43,16 @@ if(NOT glm_FOUND)
 endif()
 
 # Download and build Raylib
-FetchContent_Declare(
-    raylib
-    GIT_REPOSITORY https://github.com/raysan5/raylib.git
-    GIT_TAG 5.0
-)
-set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # don't build the supplied examples
-FetchContent_MakeAvailable(raylib)
+find_package(raylib QUIET)
+if(NOT raylib_FOUND)
+    include(FetchContent)
+    FetchContent_Declare(
+        raylib
+        GIT_REPOSITORY https://github.com/raysan5/raylib.git
+        GIT_TAG 5.5
+    )
+    FetchContent_MakeAvailable(raylib)
+endif()
 
 # Compiler-specific options
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
@@ -162,6 +170,13 @@ target_link_libraries(raytracing_simple_perf PRIVATE glm::glm)
 target_link_libraries(raytracing_optimized PRIVATE glm::glm)
 target_link_libraries(raytracing_interactive_simple PRIVATE glm::glm raylib)
 target_link_libraries(raytracing_interactive PRIVATE glm::glm raylib)
+
+# Add system libraries required by Raylib on Windows
+if(WIN32)
+    target_link_libraries(raylib_display PRIVATE winmm.lib)
+    target_link_libraries(raytracing_interactive_simple PRIVATE winmm.lib)
+    target_link_libraries(raytracing_interactive PRIVATE winmm.lib opengl32.lib gdi32.lib user32.lib kernel32.lib)
+endif()
 
 # Add Raylib include path for targets that need it
 target_include_directories(raylib_display PRIVATE ${raylib_SOURCE_DIR}/src)

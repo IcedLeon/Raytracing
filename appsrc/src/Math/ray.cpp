@@ -1,5 +1,7 @@
 #include "appsrc/include/Math/ray.h"
 
+using namespace rt;
+
 Ray::Ray()
 {
 }

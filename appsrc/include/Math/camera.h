@@ -3,22 +3,27 @@
 
 #include "appsrc/include/Math/ray.h"
 
-class Camera
+namespace rt
 {
-public:
-    Camera(Vec3 a_oLookFrom, Vec3 a_oLookAt, Vec3 a_oUp, float a_fFov, float a_fAspect, float a_fAperture, float a_fFocusDist);
 
-    Ray GetRay(float a_fU, float a_fV) const;
+    class Camera
+    {
+    public:
+        Camera(Vec3 a_oLookFrom, Vec3 a_oLookAt, Vec3 a_oUp, float a_fFov, float a_fAspect, float a_fAperture, float a_fFocusDist);
 
-    Vec3 m_oOrigin;
-    Vec3 m_oLowerLeftCorner;
-    Vec3 m_oHorizontal;
-    Vec3 m_oVertical;
-    Vec3 m_oU, m_oV, m_oW;
+        Ray GetRay(float a_fU, float a_fV) const;
 
-    Vec3 RandomUnitInDisk() const;
+        Vec3 m_oOrigin;
+        Vec3 m_oLowerLeftCorner;
+        Vec3 m_oHorizontal;
+        Vec3 m_oVertical;
+        Vec3 m_oU, m_oV, m_oW;
 
-    float m_fLensRadius;
-};
+        Vec3 RandomUnitInDisk() const;
+
+        float m_fLensRadius;
+    };
+
+} // namespace rt
 
 #endif // CAMERA_H

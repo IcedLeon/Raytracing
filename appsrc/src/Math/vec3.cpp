@@ -1,5 +1,7 @@
 #include "appsrc/include/Math/vec3.h"
 
+using namespace rt;
+
 Vec3::Vec3()
 {
 }
@@ -41,12 +43,12 @@ float Vec3::GetB() const
     return this->m_fAxis[2];
 }
 
-const Vec3& Vec3::operator+() const
+const Vec3 &Vec3::operator+() const
 {
-    return  *this;
+    return *this;
 }
 
-Vec3 Vec3::operator -() const
+Vec3 Vec3::operator-() const
 {
     return Vec3(-this->m_fAxis[0], -this->m_fAxis[1], -this->m_fAxis[2]);
 }
@@ -56,12 +58,12 @@ float Vec3::operator[](int a_iIndex) const
     return this->m_fAxis[a_iIndex];
 }
 
-float& Vec3::operator[](int a_iIndex)
+float &Vec3::operator[](int a_iIndex)
 {
-    return  this->m_fAxis[a_iIndex];
+    return this->m_fAxis[a_iIndex];
 }
 
-Vec3& Vec3::operator+=(const Vec3& a_oRhs)
+Vec3 &Vec3::operator+=(const Vec3 &a_oRhs)
 {
     this->m_fAxis[0] += a_oRhs.m_fAxis[0];
     this->m_fAxis[1] += a_oRhs.m_fAxis[1];
@@ -70,7 +72,7 @@ Vec3& Vec3::operator+=(const Vec3& a_oRhs)
     return *this;
 }
 
-Vec3& Vec3::operator-=(const Vec3& a_oRhs)
+Vec3 &Vec3::operator-=(const Vec3 &a_oRhs)
 {
     this->m_fAxis[0] -= a_oRhs.m_fAxis[0];
     this->m_fAxis[1] -= a_oRhs.m_fAxis[1];
@@ -79,7 +81,7 @@ Vec3& Vec3::operator-=(const Vec3& a_oRhs)
     return *this;
 }
 
-Vec3& Vec3::operator/=(const Vec3& a_oRhs)
+Vec3 &Vec3::operator/=(const Vec3 &a_oRhs)
 {
     this->m_fAxis[0] /= a_oRhs.m_fAxis[0];
     this->m_fAxis[1] /= a_oRhs.m_fAxis[1];
@@ -88,7 +90,7 @@ Vec3& Vec3::operator/=(const Vec3& a_oRhs)
     return *this;
 }
 
-Vec3& Vec3::operator*=(const Vec3& a_oRhs)
+Vec3 &Vec3::operator*=(const Vec3 &a_oRhs)
 {
     this->m_fAxis[0] *= a_oRhs.m_fAxis[0];
     this->m_fAxis[1] *= a_oRhs.m_fAxis[1];
@@ -97,7 +99,7 @@ Vec3& Vec3::operator*=(const Vec3& a_oRhs)
     return *this;
 }
 
-Vec3& Vec3::operator*=(float a_cfDiscriminant)
+Vec3 &Vec3::operator*=(float a_cfDiscriminant)
 {
     this->m_fAxis[0] *= a_cfDiscriminant;
     this->m_fAxis[1] *= a_cfDiscriminant;
@@ -106,7 +108,7 @@ Vec3& Vec3::operator*=(float a_cfDiscriminant)
     return *this;
 }
 
-Vec3& Vec3::operator/=(float a_cfDiscriminant)
+Vec3 &Vec3::operator/=(float a_cfDiscriminant)
 {
     float _k = 1.0f / a_cfDiscriminant;
 

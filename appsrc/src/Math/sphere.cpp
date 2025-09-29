@@ -1,11 +1,13 @@
 #include "appsrc/include/Math/sphere.h"
 
+using namespace rt;
+
 Sphere::Sphere() : m_oCenter(Vec3()),
                    m_fRadius(0.0f)
 {
 }
 
-Sphere::Sphere(Vec3 a_oCenter, float a_fRadius, Material* a_oMaterial)
+Sphere::Sphere(Vec3 a_oCenter, float a_fRadius, Material *a_oMaterial)
     : m_oCenter(a_oCenter),
       m_fRadius(a_fRadius),
       m_oMaterial(a_oMaterial)

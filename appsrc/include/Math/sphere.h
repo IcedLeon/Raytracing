@@ -3,17 +3,23 @@
 
 #include "appsrc/include/Math/hittable.h"
 
-class Sphere : public Hittable
+namespace rt
 {
-public:
-    Sphere();
-    Sphere(Vec3 a_oCenter, float a_fRadius, Material* a_oMaterial);
 
-    virtual bool Hit(const Ray& a_oRay, float a_fTMin, float a_fTMax, HitRecord& a_oRecord) const;
+    class Sphere : public Hittable
+    {
+    public:
+        Sphere();
+        Sphere(Vec3 a_oCenter, float a_fRadius, Material *a_oMaterial);
 
-    Vec3 m_oCenter;
-    float m_fRadius;
+        virtual bool Hit(const Ray &a_oRay, float a_fTMin, float a_fTMax, HitRecord &a_oRecord) const;
 
-    Material* m_oMaterial;
-};
+        Vec3 m_oCenter;
+        float m_fRadius;
+
+        Material *m_oMaterial;
+    };
+
+} // namespace rt
+
 #endif // SPHERE_H
